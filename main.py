@@ -5,9 +5,9 @@ import discord
 from discord import utils
 from discord.ext import commands
 
-TOKEN = "PUT YOUR TOKEN HERE"
-PREFIX = "-"
-ROLEID = 1234567890
+TOKEN = "Nice Try Bud."
+PREFIX = "?"
+ROLEID = 771845335479484456
 
 locale.setlocale(locale.LC_ALL, "en_US.utf8")
 start_time = time.time()
@@ -28,7 +28,7 @@ class Bot(commands.Bot):
         print(f'#-------------------------------#\n'
               f'| Username: {self.user.name}\n'
               f'| User ID: {self.user.id}\n'
-              f'| Developer:  NoirCoding Team\n'
+              f'| Developer: NoirCoding Team\n'
               f'| Guilds: {len(self.guilds)}\n'
               f'| Users: {len([member for member in self.users if not member.bot])}\n'
               f'| Base OAuth URL: {utils.oauth_url(self.user.id)}\n'
@@ -37,7 +37,7 @@ class Bot(commands.Bot):
               f'# ------------------------------#')
 
 
-GowixxBot = Bot()
-GowixxBot.load_extension('commands')
+client = Bot()
+client.load_extension('commands')
 
-GowixxBot.run(TOKEN)
+client.run(TOKEN)

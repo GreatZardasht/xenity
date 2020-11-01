@@ -3,7 +3,7 @@ import random
 import discord
 from discord.ext import commands
 
-from main import GowixxBot, ROLEID
+from main import client, ROLEID
 
 
 def _getline(command: str):
@@ -22,7 +22,7 @@ def _getline(command: str):
 
 class Commands(commands.Cog):
     def __init__(self):
-        self.bot = GowixxBot
+        self.bot = client
 
     @commands.command(name="ping")
     async def _ping(self, ctx):
@@ -35,21 +35,25 @@ class Commands(commands.Cog):
 
     @commands.command(name="banned")
     @commands.has_role(int(ROLEID))
+    @commands.cooldown(1, 30, commands.BucketType.user)
     async def _banned(self, ctx):
         line = _getline("banned")
         embed = discord.Embed(title="Account Information")
         embed.add_field(name="Email", value=line.split(":")[0], inline=False)
         embed.add_field(name="Password", value=line.split(":")[1], inline=False)
-        await ctx.author.send(embed=embed)
+        await ctx.author.send(embed=embed, delete_after=60)
+        await ctx.send("Generated a banned alt. Check your DMs!", delete_after=59)
 
     @commands.command(name="unbanned")
     @commands.has_role(int(ROLEID))
-    async def _banned(self, ctx):
+    @commands.cooldown(1, 30, commands.BucketType.user)
+    async def _unbanned(self, ctx):
         line = _getline("unbanned")
         embed = discord.Embed(title="Account Information")
         embed.add_field(name="Email", value=line.split(":")[0], inline=False)
         embed.add_field(name="Password", value=line.split(":")[1], inline=False)
-        await ctx.author.send(embed=embed)
+        await ctx.author.send(embed=embed,  delete_after=60)
+        await ctx.send("Generated an unbanned alt. Check your DMs!", delete_after=59)
 
     @commands.command(name="compare")
     @commands.has_role(int(ROLEID))
@@ -61,7 +65,8 @@ class Commands(commands.Cog):
             unbanned = len(unbanned_file.readlines())
             unbanned_file.close()
         embed = discord.Embed(title="File Comparison", description=f"Banned: {banned}\nUnbanned: {unbanned}")
-        await ctx.send(embed=embed)
+        await ctx.send(embed=embed, delete_after=60)
+        
 
 
 def setup(bot):

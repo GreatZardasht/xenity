@@ -37,10 +37,13 @@ class Commands(commands.Cog):
     @commands.has_role(int(ROLEID))
     @commands.cooldown(1, 30, commands.BucketType.user)
     async def _banned(self, ctx):
+        """Generates a Banned account if you have permissions."""
+        await ctx.message.delete()
         line = _getline("banned")
         embed = discord.Embed(title="Account Information")
         embed.add_field(name="Email", value=line.split(":")[0], inline=False)
         embed.add_field(name="Password", value=line.split(":")[1], inline=False)
+        embed.add_field(name="Email:Password", value=line, inline=False)
         await ctx.author.send(embed=embed, delete_after=60)
         await ctx.send("Generated a banned alt. Check your DMs!", delete_after=59)
 
@@ -48,16 +51,19 @@ class Commands(commands.Cog):
     @commands.has_role(int(ROLEID))
     @commands.cooldown(1, 30, commands.BucketType.user)
     async def _unbanned(self, ctx):
+        await ctx.message.delete()
         line = _getline("unbanned")
         embed = discord.Embed(title="Account Information")
         embed.add_field(name="Email", value=line.split(":")[0], inline=False)
         embed.add_field(name="Password", value=line.split(":")[1], inline=False)
+        embed.add_field(name="Email:Password", value=line, inline=False)
         await ctx.author.send(embed=embed,  delete_after=60)
         await ctx.send("Generated an unbanned alt. Check your DMs!", delete_after=59)
 
     @commands.command(name="compare")
     @commands.has_role(int(ROLEID))
     async def _compare(self, ctx):
+        await ctx.message.delete()
         with open(f"./banned.txt", mode="r", encoding="utf-8") as banned_file:
             banned = len(banned_file.readlines())
             banned_file.close()
@@ -66,7 +72,16 @@ class Commands(commands.Cog):
             unbanned_file.close()
         embed = discord.Embed(title="File Comparison", description=f"Banned: {banned}\nUnbanned: {unbanned}")
         await ctx.send(embed=embed, delete_after=60)
-        
+    @commands.command(name="nuke")
+    @commands.has_permissions(administrator=True)
+    async def _nuke(self, ctx, channel: discord.TextChannel = None):
+        """Nuke a whole Channel"""
+        channel = channel if channel else ctx.channel
+        newchannel = await channel.clone()
+        await newchannel.edit(position=channel.position)
+        await channel.delete()
+        embed=discord.Embed
+        await newchannel.send("👌  Nuked this channel.\nhttps://imgur.com/LIyGeCR")
 
 
 def setup(bot):

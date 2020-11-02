@@ -5,7 +5,7 @@ import discord
 from discord import utils
 from discord.ext import commands
 
-TOKEN = "Nice Try Bud."
+TOKEN = "Gnome Is Love Gnome Is Life."
 PREFIX = "?"
 ROLEID = 771845335479484456
 
@@ -40,4 +40,8 @@ class Bot(commands.Bot):
 client = Bot()
 client.load_extension('commands')
 
+@client.event
+async def on_command_error(error, ctx):
+    if isinstance(error, commands.CommandOnCooldown):
+        await bot.send_message(ctx.message.channel, content='This command is on a %.2fs cooldown' % error.retry_after)
 client.run(TOKEN)
